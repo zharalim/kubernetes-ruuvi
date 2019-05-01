@@ -1,0 +1,28 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruuvi
+  labels:
+    app: ruuvi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruuvi
+  template:
+    metadata:
+      labels:
+        app: ruuvi
+    spec:
+      hostNetwork: true
+      # This is needed to use the cluster DNS with host network
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - image: ruuvi
+          name: ruuvi
+          imagePullPolicy: Never
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]

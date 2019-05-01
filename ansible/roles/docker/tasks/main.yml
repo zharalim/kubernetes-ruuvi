@@ -1,0 +1,62 @@
+---
+
+- name: Install dependencies
+  package:
+    name: 
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - python-dev
+      - python-setuptools
+      - python-pip
+    state: present
+
+- name: Install Ansible Docker dependencies
+  pip:
+    name: docker
+
+# TODO install with idempotent modules 
+- name: Install docker
+  shell: curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
+
+- name: Add user to docker group
+  user:
+    name: pi
+    groups: docker
+    append: true
+
+- name: Add Docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/raspbian/ stretch main
+    state: present
+
+- name: Start docker
+  service:
+    name: docker
+    state: started
+
+- name: Check swap state
+  command: swapon --summary
+  register: swap_result
+  failed_when: false
+  changed_when: false
+  check_mode: false
+
+- name: Disable swap
+  command: '{{ item }}'
+  with_items:
+    - dphys-swapfile swapoff
+    - dphys-swapfile uninstall
+    - update-rc.d dphys-swapfile remove
+  when: swap_result.stdout != ''
+
+- name: Enable cgroups
+  replace:
+    dest: /boot/cmdline.txt
+    regexp: '^(.+rootwait)$'
+    replace: '\1 {{ docker_cgroups_config }}'
+  notify: Reboot
+
+- debug:
+    msg: NOTE that you'll need to manually reboot the Ansible controller after cgroup changes
+  when: ansible_connection == 'local'

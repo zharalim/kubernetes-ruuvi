@@ -1,0 +1,22 @@
+---
+
+- name: Install tools
+  package:
+    name: vim
+    state: present
+
+- name: Configure bash aliases
+  copy:
+    dest: '/home/{{ ansible_user }}/.bash_aliases'
+    content: |
+      alias ll='ls -alF'
+    owner: '{{ ansible_user }}'
+
+- name: Configure timezone
+  command: timedatectl set-timezone {{ raspbian_prepare_timezone }}
+
+- name: Add ssh authorized key
+  authorized_key:
+    user: '{{ ansible_user }}'
+    state: present
+    key: '{{ raspbian_prepare_authorized_key }}'

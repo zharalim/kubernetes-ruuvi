@@ -1,0 +1,52 @@
+---
+
+- name: Pull k8 images
+  command: kubeadm config images pull -v3
+
+- name: Init master
+  command: kubeadm init --token-ttl=0
+  args:
+    creates: /etc/kubernetes/pki/ca.key
+
+- name: Create kubectl config dir
+  file:
+    path: '/home/{{ ansible_user }}/.kube'
+    owner: '{{ ansible_user }}'
+    group: 'pi'
+    mode: '0755'
+    state: directory
+
+- name: Copy kubectl config
+  copy: 
+    src: /etc/kubernetes/admin.conf
+    dest: '/home/{{ ansible_user }}/.kube/config'
+    owner: '{{ ansible_user }}'
+    group: 'pi'
+    mode: '0600'
+    remote_src: true
+
+- name: Get kubernetes version
+  shell: "kubectl version | base64 | tr -d '\\n'"
+  register: kubernetes_version_result
+  changed_when: false
+  check_mode: false
+
+# TODO installing weave does not work with k8 module because of https://github.com/ansible/ansible/issues/49100
+- name: Install Weave
+  command: "kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version={{ kubernetes_version_result.stdout }}"
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+
+- name: Get node description
+  command: kubectl describe nodes
+  register: nodes_describe_result
+  check_mode: false
+  changed_when: false
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+
+- name: Enable running pods on master
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+  when: "'node-role.kubernetes.io/master:NoSchedule' in nodes_describe_result.stdout"

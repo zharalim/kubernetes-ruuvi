@@ -1,0 +1,34 @@
+---
+
+- hosts: all
+  roles:
+    - role: raspbian-prepare
+      tags: role-raspbian-prepare
+
+    - role: dev-sec.ssh-hardening
+      tags: role-ssh-hardening
+
+- hosts: kubernetes-master-nodes
+  roles:
+    - role: docker
+      tags: role-docker
+
+    - role: kubeadm
+      tags: role-kubeadm
+
+    - role: bluetooth
+      tags: role-bluetooth
+
+- hosts: kubernetes-master-nodes
+  roles:
+    - role: kubernetes
+      tags: role-kubernetes
+
+- hosts: kubernetes-master-nodes
+  run_once: true
+  become: false
+  vars:
+    ruuvi_k8_definitions: '{{ playbook_dir }}/../ruuvi-definitions'
+  roles:
+    - role: ruuvi
+      tags: role-ruuvi

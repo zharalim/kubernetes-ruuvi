@@ -1,0 +1,37 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+        - name: influxdb
+          image: influxdb
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: influxdb
+              containerPort: 8086
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/influxdb
+          env:
+            # TODO templatize
+            - name: INFLUXDB_DB
+              value: ruuvi
+      volumes:
+        - name: data
+          hostPath:
+            path: /var/lib/influxdb

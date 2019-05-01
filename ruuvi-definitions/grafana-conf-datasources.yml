@@ -1,0 +1,17 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-provisioning-datasources
+data:
+  datasource.yml: |
+    apiVersion: 1
+    datasources:
+      - name: Influxdb
+        type: influxdb
+        url: http://influxdb:8086
+        access: proxy
+        database: ruuvi
+        isDefault: true
+        version: 1

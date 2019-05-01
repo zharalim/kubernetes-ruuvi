@@ -1,0 +1,31 @@
+---
+
+- name: Create dir for dockerfile
+  file: 
+    path: '/home/{{ ansible_user }}/ruuvi'
+    state: directory
+
+- name: Copy ruuvi docker files
+  synchronize: 
+    src: '{{ playbook_dir }}/../ruuvi/'
+    dest: '/home/{{ ansible_user }}/ruuvi'
+
+- name: Build ruuvi docker image
+  docker_image:
+    path: '/home/{{ ansible_user }}/ruuvi'
+    name: ruuvi
+    force: '{{ ruuvi_force_image_build | default(false) }}'
+
+- name: Start services
+  k8s:
+    definition: "{{ lookup('file', '{{ ruuvi_k8_definitions }}/{{ item }}') }}"
+    state: present
+    namespace: default
+  loop:
+    - influxdb-deployment.yml
+    - influxdb-service.yml
+    - grafana-conf-datasources.yml
+    - grafana-conf-dashboards.yml
+    - grafana-deployment.yml
+    - grafana-service.yml
+    - ruuvi-deployment.yml
