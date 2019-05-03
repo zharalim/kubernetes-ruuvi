@@ -22,7 +22,8 @@
     state: present
     namespace: default
   loop:
-    - influxdb-deployment.yml
+    - system-pv-local.yml
+    - influxdb-statefulset.yml
     - influxdb-service.yml
     - grafana-conf-datasources.yml
     - grafana-conf-dashboards.yml

@@ -1,7 +1,7 @@
 ---
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: influxdb
   labels:
@@ -31,7 +31,13 @@ spec:
             # TODO templatize
             - name: INFLUXDB_DB
               value: ruuvi
-      volumes:
-        - name: data
-          hostPath:
-            path: /var/lib/influxdb
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: local-storage
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
