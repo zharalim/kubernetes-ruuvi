@@ -2,8 +2,8 @@
 
 - hosts: all
   roles:
-    - role: raspbian-prepare
-      tags: role-raspbian-prepare
+    - role: basic-linux-config
+      tags: role-basic-linux-config
 
     - role: dev-sec.ssh-hardening
       tags: role-ssh-hardening
@@ -28,7 +28,8 @@
   run_once: true
   become: false
   vars:
-    ruuvi_k8_definitions: '{{ playbook_dir }}/../ruuvi-definitions'
+    ruuvi_dockerfile_src_dir: '{{ playbook_dir }}/../ruuvi'
+    ruuvi_k8_definitions_dir: '{{ playbook_dir }}/../ruuvi-definitions'
   roles:
     - role: ruuvi
       tags: role-ruuvi

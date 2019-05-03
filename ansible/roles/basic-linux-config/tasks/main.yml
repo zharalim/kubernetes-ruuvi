@@ -13,7 +13,8 @@
     owner: '{{ ansible_user }}'
 
 - name: Configure timezone
-  command: timedatectl set-timezone {{ raspbian_prepare_timezone }}
+  timezone:
+    name: '{{ raspbian_prepare_timezone }}'
 
 - name: Add ssh authorized key
   authorized_key:

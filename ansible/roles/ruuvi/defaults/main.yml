@@ -1,0 +1,3 @@
+---
+
+ruuvi_dockerfile_dir: /home/{{ ansible_user }}/ruuvi
