@@ -7,7 +7,7 @@
 
 - name: Copy ruuvi docker files
   synchronize: 
-    src: '{{ ruuvi_dockerfile_src_dir }}'
+    src: '{{ ruuvi_dockerfile_src_dir }}/'
     dest: '{{ ruuvi_dockerfile_dir }}'
 
 - name: Build ruuvi docker image
