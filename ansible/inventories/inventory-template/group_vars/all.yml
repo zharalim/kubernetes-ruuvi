@@ -1,0 +1,7 @@
+---
+
+raspbian_prepare_authorized_key: "{{ lookup('file', 'path to public key') }}"
+
+ansible_ssh_private_key_file: path to private key
+
+raspbian_prepare_timezone: Set to your timezone (e.g Europe/Helsinki)
