@@ -14,7 +14,7 @@ influxdb_client = None
 ruuvi_rx = None
 
 def main():
-  logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+  logging.basicConfig(format='%(asctime)s %(levelname)s - %(message)s', level=logging.INFO)
   logging.info("Initializing...")
   
   global influxdb_client
@@ -70,6 +70,8 @@ def send_data_to_influxdb(sensor_data):
     influxdb_client.write_points(json_body)
   except ConnectionError:
     logging.error("Connecting to influxdb failed")
+  except Exception:
+    logging.exception("Unexpected error when connecting to influxdb")
 
 if __name__ == '__main__':
     main()

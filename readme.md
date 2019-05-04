@@ -7,6 +7,7 @@ This is not a production ready system: RBAC is not used, grafana and influxdb pa
 The Ansible automation:
 1. Setups ssh keys and disables password access
 1. Installs Kubernetes with kubeadm
+1. Creates local persistent volumes to kubernetes
 1. Builds the `ruuvi` docker image and starts up the services.
 
 Why was this done:
@@ -35,9 +36,7 @@ Set up the raspberry pi:
 
 - ruuvi container hangs sometimes
 - Add another node to the cluster
-- Use StatefulSet for influxDB
-- Try local persistent volume for influxDB
-- Use USB storage for persistent volume support
+- Use fancier storage plugin for persistent volume support
 - Use helm
     - InfluxDB and Grafana charts. InfluxDB didn't work straight out of the box because of missing arm images.
     - Create chart for the ruuvi deployment
