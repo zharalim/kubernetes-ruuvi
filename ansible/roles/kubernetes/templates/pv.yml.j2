@@ -11,7 +11,7 @@ spec:
     storage: {{ pv.capacity }}
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
+  persistentVolumeReclaimPolicy: Recycle
   storageClassName: local-storage
   local:
     path: {{ pv.path }}

@@ -1,8 +1,13 @@
 ---
 
 kubernetes_local_persistent_volumes_map:
-  - name: local-pv
+  - name: local-pv-large
     labels:
       pv-type: sd-card
     capacity: 5Gi
-    path: /var/lib/kubernetes/local-pv
+    path: /var/lib/kubernetes/pv/large
+  - name: local-pv-small
+    labels:
+      pv-type: sd-card
+    capacity: 1Gi
+    path: /var/lib/kubernetes/pv/small

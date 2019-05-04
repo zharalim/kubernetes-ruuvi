@@ -30,7 +30,7 @@ Set up the raspberry pi:
     - Create ssh key and configure the needed variables to the group vars
     - Save the inventory to `inventories/inventory` folder or change `ansible.cfg` to match your dir
 1. Run ansible `ansible-playbook install.yml -k`. *For the first run* you'll need to use `-k` and give the raspbian's default password `raspberry` when asked.
-1. Connect to grafana http://host_ip:30000/
+1. Login to grafana with `admin:admin` http://host_ip:30000/
 
 ## TODO list
 
@@ -40,3 +40,4 @@ Set up the raspberry pi:
 - Use helm
     - InfluxDB and Grafana charts. InfluxDB didn't work straight out of the box because of missing arm images.
     - Create chart for the ruuvi deployment
+- Reclaiming persistent volumes does not work

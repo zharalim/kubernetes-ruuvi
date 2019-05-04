@@ -59,15 +59,6 @@
   loop_control:
     label: "{{ item.path }}"
 
-
-- name: Create persistent volumes
-  debug:
-    msg: "{{ lookup('template', 'pv.yml.j2') }}"
-  loop: '{{ kubernetes_local_persistent_volumes_map }}'
-  loop_control:
-    loop_var: pv
-    label: "{{ pv.name }}"
-
 - name: Create persistent volumes
   k8s:
     definition: "{{ lookup('template', 'pv.yml.j2') }}"
