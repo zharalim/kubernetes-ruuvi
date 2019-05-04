@@ -14,7 +14,7 @@ Why was this done:
 - To learn more about kubernetes. GKE was too easy ;)
 - To use RuuviTag for something fun
 
-## Steps for running the system
+## Steps for getting the system up and running
 
 Prepare your controller machine (tested on [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10)):
 1. Install Ansible (2.7)
