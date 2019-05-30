@@ -15,6 +15,21 @@
     name: kubeadm
     state: present
 
+- name: Check swap state
+  command: swapon --summary
+  register: swap_result
+  failed_when: false
+  changed_when: false
+  check_mode: false
+
+- name: Disable swap
+  command: '{{ item }}'
+  with_items:
+    - dphys-swapfile swapoff
+    - dphys-swapfile uninstall
+    - update-rc.d dphys-swapfile remove
+  when: swap_result.stdout != ''
+
 - name: Configure iptables bridge
   sysctl:
     name: net.bridge.bridge-nf-call-iptables
