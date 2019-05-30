@@ -32,6 +32,9 @@ Set up the raspberry pi:
 1. Run ansible `ansible-playbook install.yml -k`. *For the first run* you'll need to use `-k` and give the raspbian's default password `raspberry` when asked.
 1. Login to grafana with `admin:admin` http://host_ip:30000/
 
+Remember to remove the old fingerprint from ~/.ssh/known_hosts after reflashing or you will just get `SSH Error: data could not be sent to remote host` 
+when running Ansible.
+
 ## TODO list
 
 - ruuvi container hangs sometimes
@@ -41,3 +44,5 @@ Set up the raspberry pi:
     - InfluxDB and Grafana charts. InfluxDB didn't work straight out of the box because of missing arm images.
     - Create chart for the ruuvi deployment
 - Reclaiming persistent volumes does not work
+- The ruuvi container is run as root because of ruuvi library limitations
+  - https://unix.stackexchange.com/questions/96106/bluetooth-le-scan-as-non-root
