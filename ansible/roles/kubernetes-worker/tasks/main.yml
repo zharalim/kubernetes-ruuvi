@@ -1,0 +1,34 @@
+---
+
+- name: Pull k8 images
+  command: kubeadm config images pull -v3
+
+- name: Create token on master
+  command: kubeadm token create --print-join-command --ttl 5m
+  register: master_token_result
+  delegate_to: '{{ kubernetes_worker_registration_master_node }}'
+
+- set_fact:
+    join_token: "{{ master_token_result.stdout | regex_search(regexp, '\\1') | first }}"
+  vars:
+    regexp: '--token ([^\s]+)'
+
+- debug:
+    var: join_token
+
+- set_fact:
+    join_ca_hash: "{{ master_token_result.stdout | regex_search(regexp, '\\1') | first }}"
+  vars:
+    regexp: '--discovery-token-ca-cert-hash ([^\s]+)'
+
+- debug:
+    var: join_ca_hash
+
+- name: Init worker
+  command: |
+    kubeadm join {{ kubernetes_worker_registration_master_node }}:6443
+    --token {{ join_token }}
+    --discovery-token-ca-cert-hash {{ join_ca_hash }}
+    --node-name worker-{{ inventory_hostname }}
+  args:
+    creates: /etc/kubernetes/kubelet.conf

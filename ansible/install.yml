@@ -8,11 +8,11 @@
     - role: dev-sec.ssh-hardening
       tags: role-ssh-hardening
 
-- hosts: kubernetes-master-nodes
-  roles:
+- hosts: kubernetes-all-nodes
+  roles: 
     - role: docker
       tags: role-docker
-
+    
     - role: kubeadm
       tags: role-kubeadm
 
@@ -21,8 +21,13 @@
 
 - hosts: kubernetes-master-nodes
   roles:
-    - role: kubernetes
-      tags: role-kubernetes
+    - role: kubernetes-master
+      tags: role-kubernetes-master
+        
+- hosts: kubernetes-worker-nodes
+  roles:
+    - role: kubernetes-worker
+      tags: role-kubernetes-worker
 
 - hosts: kubernetes-master-nodes
   run_once: true

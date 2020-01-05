@@ -1,5 +1,11 @@
 ---
 
+kubernetes_enable_pods_on_master: "{{ groups['kubernetes-all-nodes'] | length == 1 }}"
+
+kubernetes_network_driver: flannel
+# Flannel requires specific network cidr that matches the flannel config
+kubernetes_pod_network_cidr: '10.244.0.0/16'
+
 kubernetes_local_persistent_volumes_map:
   - name: local-pv-large
     labels:

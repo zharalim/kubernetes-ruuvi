@@ -2,3 +2,9 @@
 [kubernetes-master-nodes]
 host ip address
 
+[kubernetes-worker-nodes]
+host ip address
+
+[kubernetes-all-nodes:children]
+kubernetes-master-nodes
+kubernetes-worker-nodes

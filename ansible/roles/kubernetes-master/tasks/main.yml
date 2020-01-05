@@ -4,7 +4,10 @@
   command: kubeadm config images pull -v3
 
 - name: Init master
-  command: kubeadm init --token-ttl=0
+  command: |
+    kubeadm init 
+    --pod-network-cidr={{ kubernetes_pod_network_cidr }}
+    --node-name master-{{ inventory_hostname }}
   args:
     creates: /etc/kubernetes/pki/ca.key
 
@@ -31,9 +34,17 @@
   changed_when: false
   check_mode: false
 
+# Flannel doesn't work with iptables >= 1.8 https://github.com/weaveworks/weave/issues/3717
 # TODO installing weave does not work with k8 module because of https://github.com/ansible/ansible/issues/49100
 - name: Install Weave
   command: "kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version={{ kubernetes_version_result.stdout }}"
+  when: "kubernetes_network_driver == 'weave'"
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+
+- name: Install flannel
+  command: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml"
+  when: "kubernetes_network_driver == 'flannel'"
   environment:
     KUBECONFIG: /etc/kubernetes/admin.conf
 
@@ -49,7 +60,9 @@
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   environment:
     KUBECONFIG: /etc/kubernetes/admin.conf
-  when: "'node-role.kubernetes.io/master:NoSchedule' in nodes_describe_result.stdout"
+  when: 
+    - "'node-role.kubernetes.io/master:NoSchedule' in nodes_describe_result.stdout"
+    - kubernetes_enable_pods_on_master
 
 - name: Create local directories for persistent volumes
   file: 

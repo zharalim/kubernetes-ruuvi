@@ -30,10 +30,16 @@
     - update-rc.d dphys-swapfile remove
   when: swap_result.stdout != ''
 
+- name: Prevent swap on boot
+  service:
+    name: dphys-swapfile
+    state: stopped
+    enabled: false
+
 - name: Configure iptables bridge
   sysctl:
     name: net.bridge.bridge-nf-call-iptables
-    value: 1
+    value: '1'
     state: present
 
 - name: Install openshift library for managing kubernetes with Ansible

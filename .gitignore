@@ -1,2 +1,4 @@
 settings.json
 .vscode
+ansible/inventories/inventory/
+ansible/data/

@@ -12,9 +12,11 @@
 
 - name: Build ruuvi docker image
   docker_image:
-    path: '{{ ruuvi_dockerfile_dir }}'
     name: ruuvi
-    force: '{{ ruuvi_force_image_build | default(false) }}'
+    path: '{{ ruuvi_dockerfile_dir }}'
+    force_source: '{{ ruuvi_force_image_build | default(false) }}'
+    source: build
+    state: present
 
 - name: Start services
   k8s:

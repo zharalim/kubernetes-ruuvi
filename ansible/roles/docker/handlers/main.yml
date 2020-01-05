@@ -3,4 +3,8 @@
 - name: Reboot
   reboot:
   when: ansible_connection != 'local'
-  
+
+- name: Restart docker
+  service:
+    name: docker
+    state: restarted

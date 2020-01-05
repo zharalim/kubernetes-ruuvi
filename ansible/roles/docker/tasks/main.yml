@@ -9,15 +9,41 @@
       - python-dev
       - python-setuptools
       - python-pip
+      - python-docker
     state: present
 
-- name: Install Ansible Docker dependencies
-  pip:
-    name: docker
+- name: Install docker repo key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
 
-# TODO install with idempotent modules 
+- name: Add Docker repository
+  apt_repository:
+    repo: deb [arch=armhf] https://download.docker.com/linux/raspbian/ {{ ansible_distribution_release }} stable
+    state: present
+
+# https://github.com/raspberrypi/linux/issues/3021
+- name: Prevent installation of unsupported aufs-dkms
+  copy:
+    dest: /etc/apt/preferences.d/aufs-tools 
+    content: |
+      Package: aufs-tools
+      Pin: version *
+      Pin-Priority: -1
+    mode: '0644'
+    owner: root
+    group: root
+
 - name: Install docker
-  shell: curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates 
+      - curl
+      - software-properties-common
+      - docker-ce
+    state: present
+    update_cache: true
 
 - name: Add user to docker group
   user:
@@ -25,10 +51,14 @@
     groups: docker
     append: true
 
-- name: Add Docker repository
-  apt_repository:
-    repo: deb https://download.docker.com/linux/raspbian/ stretch main
-    state: present
+- name: Copy daemon config
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart docker
 
 - name: Start docker
   service:
