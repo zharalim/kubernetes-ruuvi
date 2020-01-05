@@ -25,7 +25,7 @@
 # https://github.com/raspberrypi/linux/issues/3021
 - name: Prevent installation of unsupported aufs-dkms
   copy:
-    dest: /etc/apt/preferences.d/aufs-tools 
+    dest: /etc/apt/preferences.d/aufs-tools
     content: |
       Package: aufs-tools
       Pin: version *
@@ -38,7 +38,7 @@
   apt:
     name:
       - apt-transport-https
-      - ca-certificates 
+      - ca-certificates
       - curl
       - software-properties-common
       - docker-ce

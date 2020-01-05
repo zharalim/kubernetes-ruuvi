@@ -5,7 +5,7 @@
 
 - name: Init master
   command: |
-    kubeadm init 
+    kubeadm init
     --pod-network-cidr={{ kubernetes_pod_network_cidr }}
     --node-name {{ inventory_hostname }}
   args:
