@@ -9,10 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Lint Ansible Playbook
+    - name: Lint Ansible playbook
       uses: ansible/ansible-lint-action@master
       with:
-        targets: "./ansible/"
+        targets: "ansible/install.yml"
         args: ""
-    - name: Run a one-line script
-      run: echo Hello, world!
