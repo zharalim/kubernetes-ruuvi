@@ -1,6 +1,6 @@
 ---
 
-kubernetes_enable_pods_on_master: "{{ groups['kubernetes-all-nodes'] | length == 1 }}"
+kubernetes_single_node_cluster: "{{ groups['kubernetes-all-nodes'] | length == 1 }}"
 
 kubernetes_network_driver: flannel
 # Flannel requires specific network cidr that matches the flannel config
@@ -17,3 +17,6 @@ kubernetes_local_persistent_volumes_map:
       pv-type: sd-card
     capacity: 1Gi
     path: /var/lib/kubernetes/pv/small
+
+kubernetes_local_persistent_volume_nodes:
+  - '{{ groups["kubernetes-master-nodes"][0] if kubernetes_single_node_cluster else groups["kubernetes-worker-nodes"][0] }}'

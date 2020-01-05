@@ -1,23 +1,5 @@
 ---
 
-- name: Create dir for dockerfile
-  file: 
-    path: '{{ ruuvi_dockerfile_dir }}'
-    state: directory
-
-- name: Copy ruuvi docker files
-  synchronize: 
-    src: '{{ ruuvi_dockerfile_src_dir }}/'
-    dest: '{{ ruuvi_dockerfile_dir }}'
-
-- name: Build ruuvi docker image
-  docker_image:
-    name: ruuvi
-    path: '{{ ruuvi_dockerfile_dir }}'
-    force_source: '{{ ruuvi_force_image_build | default(false) }}'
-    source: build
-    state: present
-
 - name: Start services
   k8s:
     definition: "{{ lookup('file', '{{ ruuvi_k8_definitions_dir }}/{{ item }}') }}"

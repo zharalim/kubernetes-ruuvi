@@ -21,5 +21,6 @@ spec:
         - matchExpressions:
           - key: kubernetes.io/hostname
             operator: In
-            values:
-              - raspberrypi
+            values: 
+              {{ kubernetes_local_persistent_volume_nodes | to_yaml(indent=14) }}
+

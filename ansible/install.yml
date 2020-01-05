@@ -29,11 +29,21 @@
     - role: kubernetes-worker
       tags: role-kubernetes-worker
 
+# Build image on worker node to skip setting up docker registry
+- hosts: kubernetes-worker-nodes
+  become: false
+  vars:
+    ruuvi_dockerfile_src_dir: '{{ playbook_dir }}/../ruuvi'
+  tasks:
+    - import_role: 
+        name: ruuvi
+        tasks_from: build
+      tags: role-ruuvi
+
 - hosts: kubernetes-master-nodes
   run_once: true
   become: false
   vars:
-    ruuvi_dockerfile_src_dir: '{{ playbook_dir }}/../ruuvi'
     ruuvi_k8_definitions_dir: '{{ playbook_dir }}/../ruuvi-definitions'
   roles:
     - role: ruuvi

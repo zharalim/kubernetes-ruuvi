@@ -29,6 +29,6 @@
     kubeadm join {{ kubernetes_worker_registration_master_node }}:6443
     --token {{ join_token }}
     --discovery-token-ca-cert-hash {{ join_ca_hash }}
-    --node-name worker-{{ inventory_hostname }}
+    --node-name {{ inventory_hostname }}
   args:
     creates: /etc/kubernetes/kubelet.conf

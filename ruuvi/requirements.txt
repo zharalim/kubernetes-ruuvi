@@ -1,2 +1,3 @@
+rx<3.0
 ruuvitag_sensor
 influxdb

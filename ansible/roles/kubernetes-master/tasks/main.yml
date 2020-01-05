@@ -7,7 +7,7 @@
   command: |
     kubeadm init 
     --pod-network-cidr={{ kubernetes_pod_network_cidr }}
-    --node-name master-{{ inventory_hostname }}
+    --node-name {{ inventory_hostname }}
   args:
     creates: /etc/kubernetes/pki/ca.key
 
@@ -62,7 +62,7 @@
     KUBECONFIG: /etc/kubernetes/admin.conf
   when: 
     - "'node-role.kubernetes.io/master:NoSchedule' in nodes_describe_result.stdout"
-    - kubernetes_enable_pods_on_master
+    - kubernetes_single_node_cluster
 
 - name: Create local directories for persistent volumes
   file: 
