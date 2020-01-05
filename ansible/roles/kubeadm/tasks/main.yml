@@ -42,6 +42,14 @@
     value: '1'
     state: present
 
+# TODO this is not persistent!
+# Quick fix for
+# https://github.com/kubernetes-sigs/kubespray/issues/4674
+- name: Allow forward traffic
+  iptables:
+    chain: FORWARD
+    policy: ACCEPT
+
 - name: Install openshift library for managing kubernetes with Ansible
   pip:
     name: openshift
