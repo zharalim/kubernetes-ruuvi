@@ -9,5 +9,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Lint Ansible Playbook
+      uses: ansible/ansible-lint-action@master
+      with:
+        targets: "./ansible/"
+        args: ""
     - name: Run a one-line script
       run: echo Hello, world!
