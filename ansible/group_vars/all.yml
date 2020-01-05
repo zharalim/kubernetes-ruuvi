@@ -1,0 +1,21 @@
+---
+
+kubernetes_single_node_cluster: "{{ groups['kubernetes-all-nodes'] | length == 1 }}"
+
+kubernetes_pv_node: '{{ groups["kubernetes-master-nodes"][0] if kubernetes_single_node_cluster else groups["kubernetes-worker-nodes"][0] }}'
+
+kubernetes_local_persistent_volumes_map:
+  - name: local-pv-large
+    labels:
+      pv-type: sd-card
+    capacity: 5Gi
+    path: /var/lib/kubernetes/pv/large
+    node: '{{ kubernetes_pv_node }}'
+  - name: local-pv-small
+    labels:
+      pv-type: sd-card
+    capacity: 1Gi
+    path: /var/lib/kubernetes/pv/small
+    node: '{{ kubernetes_pv_node }}'
+    
+

@@ -1,5 +1,14 @@
 ---
 
+- name: Create local directories for persistent volumes
+  file: 
+    path: '{{ item.path }}'
+    state: directory
+  loop: '{{ kubernetes_local_persistent_volumes_map }}'
+  when: 'item.node == inventory_hostname'
+  loop_control:
+    label: "{{ item.path }}"
+
 - name: Pull k8 images
   command: kubeadm config images pull -v3
 

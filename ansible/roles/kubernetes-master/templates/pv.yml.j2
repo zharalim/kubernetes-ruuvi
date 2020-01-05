@@ -22,5 +22,5 @@ spec:
           - key: kubernetes.io/hostname
             operator: In
             values: 
-              {{ kubernetes_local_persistent_volume_nodes | to_yaml(indent=14) }}
+              - {{ pv.node }}
 

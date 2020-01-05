@@ -64,14 +64,6 @@
     - "'node-role.kubernetes.io/master:NoSchedule' in nodes_describe_result.stdout"
     - kubernetes_single_node_cluster
 
-- name: Create local directories for persistent volumes
-  file: 
-    path: '{{ item.path }}'
-    state: directory
-  loop: '{{ kubernetes_local_persistent_volumes_map }}'
-  loop_control:
-    label: "{{ item.path }}"
-
 - name: Create persistent volumes
   k8s:
     definition: "{{ lookup('template', 'pv.yml.j2') }}"
