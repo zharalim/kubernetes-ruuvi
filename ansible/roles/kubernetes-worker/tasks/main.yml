@@ -1,7 +1,7 @@
 ---
 
 - name: Create local directories for persistent volumes
-  file: 
+  file:
     path: '{{ item.path }}'
     state: directory
   loop: '{{ kubernetes_local_persistent_volumes_map }}'
@@ -17,20 +17,24 @@
   register: master_token_result
   delegate_to: '{{ kubernetes_worker_registration_master_node }}'
 
-- set_fact:
+- name: Set join token fact
+  set_fact:
     join_token: "{{ master_token_result.stdout | regex_search(regexp, '\\1') | first }}"
   vars:
     regexp: '--token ([^\s]+)'
 
-- debug:
+- name: Print join token
+  debug:
     var: join_token
 
-- set_fact:
+- name: Set join ca hash fact
+  set_fact:
     join_ca_hash: "{{ master_token_result.stdout | regex_search(regexp, '\\1') | first }}"
   vars:
     regexp: '--discovery-token-ca-cert-hash ([^\s]+)'
 
-- debug:
+- name: Print join CA hash
+  debug:
     var: join_ca_hash
 
 - name: Init worker

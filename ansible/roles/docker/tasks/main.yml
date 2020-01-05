@@ -2,7 +2,7 @@
 
 - name: Install dependencies
   package:
-    name: 
+    name:
       - build-essential
       - libssl-dev
       - libffi-dev

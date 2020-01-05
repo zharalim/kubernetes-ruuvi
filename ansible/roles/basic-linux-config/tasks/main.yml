@@ -17,7 +17,7 @@
     dest: '/home/{{ ansible_user }}/.vimrc'
     content: |
       set mouse-=a
-    owner: '{{ ansible_user }}' 
+    owner: '{{ ansible_user }}'
 
 - name: Configure timezone
   timezone:

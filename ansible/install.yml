@@ -9,10 +9,10 @@
       tags: role-ssh-hardening
 
 - hosts: kubernetes-all-nodes
-  roles: 
+  roles:
     - role: docker
       tags: role-docker
-    
+
     - role: kubeadm
       tags: role-kubeadm
 
@@ -23,7 +23,7 @@
   roles:
     - role: kubernetes-master
       tags: role-kubernetes-master
-        
+
 - hosts: kubernetes-worker-nodes
   roles:
     - role: kubernetes-worker
@@ -35,7 +35,7 @@
   vars:
     ruuvi_dockerfile_src_dir: '{{ playbook_dir }}/../ruuvi'
   tasks:
-    - import_role: 
+    - import_role:
         name: ruuvi
         tasks_from: build
       tags: role-ruuvi

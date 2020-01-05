@@ -20,7 +20,7 @@
     state: directory
 
 - name: Copy kubectl config
-  copy: 
+  copy:
     src: /etc/kubernetes/admin.conf
     dest: '/home/{{ ansible_user }}/.kube/config'
     owner: '{{ ansible_user }}'
@@ -60,7 +60,7 @@
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   environment:
     KUBECONFIG: /etc/kubernetes/admin.conf
-  when: 
+  when:
     - "'node-role.kubernetes.io/master:NoSchedule' in nodes_describe_result.stdout"
     - kubernetes_single_node_cluster
 

@@ -28,7 +28,7 @@
     - dphys-swapfile swapoff
     - dphys-swapfile uninstall
     - update-rc.d dphys-swapfile remove
-  when: swap_result.stdout != ''
+  when: swap_result.stdout | length != 0
 
 - name: Prevent swap on boot
   service:

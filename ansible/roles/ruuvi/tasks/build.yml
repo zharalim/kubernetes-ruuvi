@@ -1,12 +1,12 @@
 ---
 
 - name: Create dir for dockerfile
-  file: 
+  file:
     path: '{{ ruuvi_dockerfile_dir }}'
     state: directory
 
 - name: Copy ruuvi docker files
-  synchronize: 
+  synchronize:
     src: '{{ ruuvi_dockerfile_src_dir }}/'
     dest: '{{ ruuvi_dockerfile_dir }}'
 
